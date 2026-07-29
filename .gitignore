@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Uložené hry hráča do repozitára nepatria
+ulozenia/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
