@@ -113,6 +113,32 @@ Ak chceš zažiť aj zakladanie projektu:
 
 Ale aj tak si potom lekcie stiahni — inak nemáš podľa čoho ísť.
 
+### ⚠️ Ak v paletke `Git: Clone` vôbec nie je
+
+Znamená to, že **VS Code nenašiel git** a schoval všetky git príkazy.
+Over si v termináli:
+
+```
+git --version
+```
+
+- `'git' is not recognized` → git nemáš nainštalovaný. Preskoč na sekciu 7
+  (Git → Inštalácia), nainštaluj ho, **zavri VS Code úplne** a otvor znova.
+  Nie „Reload Window" — VS Code hľadá git len pri štarte.
+- Verzia sa vypíše, ale príkaz stále chýba → `Ctrl + ,` → `git.enabled`
+  musí byť zaškrtnuté; prípadne nastav `git.path` na
+  `C:\Program Files\Git\bin\git.exe`.
+
+Klonovať sa dá aj bez paletky, priamo v termináli — funguje to vždy:
+
+```
+cd C:\Users\<tvoje-meno>\Documents
+git clone https://github.com/<ty>/Game.git
+cd Game
+git checkout claude/game-learning-project-bcbsar
+code .
+```
+
 ---
 
 ## 4. Virtuálne prostredie (venv)
