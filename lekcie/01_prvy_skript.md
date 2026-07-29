@@ -54,6 +54,25 @@ vek = int(input("Vek: "))
 
 ---
 
+## Ako skript spustíš
+
+V termináli VS Code, z koreňového priečinka projektu:
+
+```
+python hra/main.py
+```
+
+> **Nepíš zatiaľ `python -m hra`.** Dostaneš hlášku
+> `'hra' is a package and cannot be directly executed`. Prepínač `-m` hľadá
+> v priečinku súbor `__main__.py` a ten vytvoríš až v lekcii 05. Do tej doby
+> spúšťaš súbory priamo cestou.
+
+Ak si zvyknutý na tlačidlo ▶ vpravo hore, funguje tiež — spustí súbor, ktorý
+máš práve otvorený. Dôležité je len to, aby výstup šiel do **terminálu**,
+inak nebudeš vedieť odpovedať na `input()`.
+
+---
+
 ## Úloha
 
 Vytvor `hra/main.py` a naprogramuj uvítaciu obrazovku:
