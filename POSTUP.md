@@ -4,7 +4,8 @@ Odškrtávaj si lekcie. Vidieť postup je väčšia motivácia, než sa zdá.
 Dopisuj si aj poznámky — čo bolo ťažké, na čom si sa zasekol.
 
 ## Fáza 0 — základy
-- [ ] 00 Nástroje a Git
+- [ ] 00 Založenie projektu (Python, VS Code, venv, git)
+- [ ] 00b VS Code v dennej práci
 - [ ] 01 Prvý skript
 - [ ] 02 Rozhodovanie a slučky
 - [ ] 03 Funkcie

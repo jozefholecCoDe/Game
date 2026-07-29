@@ -1,0 +1,38 @@
+{
+  // Cestu k interpreteru zámerne nefixujeme — na Windows je v .venv\Scripts\,
+  // na macOS/Linuxe v .venv/bin/. VS Code si .venv nájde sám; ak nie,
+  // použi Ctrl+Shift+P → "Python: Select Interpreter".
+  "python.terminal.activateEnvironment": true,
+
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["testy"],
+  "python.testing.unittestEnabled": false,
+
+  "[python]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.rulers": [88],
+    "editor.formatOnSave": false
+  },
+
+  "[json]": {
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
+  },
+
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.encoding": "utf8",
+
+  "editor.renderWhitespace": "boundary",
+  "editor.detectIndentation": false,
+
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.ruff_cache": true
+  }
+}

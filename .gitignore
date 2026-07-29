@@ -11,7 +11,12 @@ venv/
 ulozenia/
 
 # Editor / OS
-.vscode/
+# .vscode/ ignorujeme celý OKREM troch súborov, ktoré patria k projektu
+# (nastavenia odsadenia, konfigurácia F5, odporúčané rozšírenia).
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .idea/
 .DS_Store
 Thumbs.db

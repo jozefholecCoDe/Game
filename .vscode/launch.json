@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // F5 → spustí celú hru (python -m hra)
+      // console: integratedTerminal je KĽÚČOVÉ — bez neho nefunguje input()
+      "name": "Spusti hru",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "hra",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      // F5 → spustí súbor, ktorý máš práve otvorený
+      "name": "Spusti otvorený súbor",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

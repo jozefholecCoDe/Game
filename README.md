@@ -24,6 +24,25 @@ Tvoj cieľ je rozbehnúť to v Pythone a pre **túto** hru je to dobrá voľba:
 
 Nepreskakuj písanie kódu. Čítanie riešenia nie je učenie sa.
 
+## Rýchly štart (Windows + VS Code)
+
+Podrobne je to v `lekcie/00_nastroje_a_git.md` — toto je len zhrnutie.
+
+```powershell
+# 1. Otvor priečinok projektu vo VS Code (File → Open Folder)
+# 2. Ctrl + ö otvorí terminál
+python -m venv .venv
+.venv\Scripts\Activate.ps1        # macOS/Linux: source .venv/bin/activate
+python --version
+```
+
+Ak PowerShell odmietne skript spustiť:
+`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
+Potom `Ctrl + Shift + P` → `Python: Select Interpreter` → vyber ten s `.venv`.
+
+Samostatné CMD okno nepotrebuješ — terminál je súčasťou VS Code.
+
 ## Štruktúra projektu
 
 ```
@@ -34,7 +53,8 @@ Game/
 ├── riesenia/        # referenčné riešenia lekcií 01–03 (AŽ POTOM)
 ├── hra/             # tvoj kód — sem píšeš
 │   └── data/        # JSON dáta: triedy, scény, predmety, kúzla
-└── testy/           # testy (od lekcie 17)
+├── testy/           # testy (od lekcie 17)
+└── .vscode/         # nastavenia VS Code (odsadenie, F5, rozšírenia)
 ```
 
 ## Spustenie

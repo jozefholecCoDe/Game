@@ -12,7 +12,8 @@ To je normálne. Nikto sa nenaučí programovať za víkend.
 
 | # | Lekcia | Python koncept | Výsledok v hre |
 |---|--------|----------------|----------------|
-| 00 | Nástroje a Git | terminál, git, commit | prázdny projekt v gite |
+| 00 | Založenie projektu | Python, VS Code, venv, terminál, git | projekt pripravený na prácu |
+| 00b | VS Code v dennej práci | skratky, debugger, breakpointy | vieš sa v editore pohybovať |
 | 01 | Prvý skript | premenné, `print`, `input`, f-string | uvítacia obrazovka |
 | 02 | Rozhodovanie a slučky | `if/elif/else`, `while`, `for` | hlavné menu, ktoré sa opakuje |
 | 03 | Funkcie | `def`, parametre, `return`, rozsah premenných | menu rozdelené na funkcie |
