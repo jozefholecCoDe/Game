@@ -5,7 +5,7 @@ Dopisuj si aj poznámky — čo bolo ťažké, na čom si sa zasekol.
 
 ## Fáza 0 — základy
 - [x] 00 Založenie projektu (Python, VS Code, venv, git)
-- [ ] 00b VS Code v dennej práci
+- [x] 00b VS Code v dennej práci
 - [ ] 01 Prvý skript
 - [ ] 02 Rozhodovanie a slučky
 - [ ] 03 Funkcie
