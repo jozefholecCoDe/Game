@@ -10,14 +10,31 @@ trieda = "Warrior"
 maximum = 30
 plne = hp * 20 // maximum          # // je celočíselné delenie
 
-hraBezi = True
+def hlavicka ():
+    print ("==============================")
+    print ("         Syn Kováča           ")
+    print ("==============================")
+
+def menu ():
+    print ("1 - Nová hra")
+    print ("2 - O hre")
+    print ("3 - Koniec")
+
+def hlSluscka ():
+    hraBezi = True
+    while hraBezi:
+        hlavicka ()
+        menu ()
+
+
+
+
+
 while hraBezi:
     print ("1 - Nová hra /n2 - O hre /n3 - Koniec")
     volba = input ("< ")
     if volba == "1":
-        print ("==============================")
-        print ("         Syn Kováča           ")
-        print ("==============================")
+
 
         meno = input ("Zadaj meno:")
 
