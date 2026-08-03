@@ -1,14 +1,21 @@
-utok = 5
-obrana = 2
-rage = 0
-kocka = 6
+postava = {
+    "meno": "Kael",
+    "trieda": "warrior",
+    "hp": 30,
+    "hp_max": 30,
+    "utok": 5,
+    "obrana": 2,
+    "rage": 0,
+    "level": 1,
+    "xp": 0,
+    "inventar": ["D6"],
+}
 
-utok_celkom = utok + kocka
-
-trieda = "warrior"
-
-hp = 15
-maximum = 30
+NEPRIATELIA = {
+    "vlk":     {"meno": "Hladný vlk",  "hp": 12, "utok": 4, "obrana": 0, "xp": 10},
+    "zbojnik": {"meno": "Zbojník",     "hp": 18, "utok": 5, "obrana": 1, "xp": 15},
+    "grimjaw": {"meno": "Grimjaw",     "hp": 34, "utok": 8, "obrana": 3, "xp": 40},
+}
 
 def hlavicka():
     print("==============================")
@@ -18,25 +25,26 @@ def hlavicka():
 def menu():
     print("1 - Nová hra")
     print("2 - O hre")
-    print("3 - Koniec")
+    print("3 - Inventar")
+    print("4 - Koniec")
 
-def vytvor_warriora(meno, trieda):
-    print(f"Trieda: {trieda}")
-    return meno
+def vytvor_warriora(postava):
+    print(f"Trieda: {postava['trieda']}")
+    return postava["meno"]
 
-def zobraz_postavu(hp, utok_celkom, obrana, rage):
-    print(f"❤️  HP:        {hp}")
-    print(f"⚔️  Útok:      {utok_celkom}")
-    print(f"🛡️  Obrana:    {obrana}")
-    print(f"🔥 Rage:       {rage}")
+def zobraz_postavu(postava):
+    print(f"❤️  HP:        {postava['hp']}")
+    print(f"⚔️  Útok:      {postava['utok']}")
+    print(f"🛡️  Obrana:    {postava['obrana']}")
+    print(f"🔥 Rage:       {postava['rage']}")
 
-def hp_bar(hp, maximum):
-    plne = hp * 20 // maximum
-    bar = ("[" + "█" * plne + "·" * (20 - plne) + f"] {hp}/{maximum}")
+def hp_bar(postava):
+    plne = postava['hp'] * 20 // postava['hp_max']
+    bar = ("[" + "█" * plne + "·" * (20 - plne) + f"] {postava['hp']}/{postava['hp_max']}")
     return bar
 
-def vypocitaj_poskodenie(utok, obrana):
-    poskodenie = utok - obrana
+def vypocitaj_poskodenie(postava, obrana):
+    poskodenie = postava['utok'] - obrana
     if poskodenie < 1:
         poskodenie = 1
     return poskodenie
@@ -48,16 +56,18 @@ def hlavna_slucka():
         menu()
         volba = input("> ")
         if volba == "1":
-            zadaj_meno = input("Zadaj meno: ")
-            meno = vytvor_warriora(zadaj_meno, trieda)
+            postava['meno'] = input("Zadaj meno: ")
+            meno = vytvor_warriora(postava)
             print(f"Vitaj {meno}!")
-            zobraz_postavu(hp, utok_celkom, obrana, rage)
-            print(hp_bar(hp, maximum))
-            poskodenie = vypocitaj_poskodenie(utok_celkom, 0)
+            zobraz_postavu(postava)
+            print(hp_bar(postava))
+            poskodenie = vypocitaj_poskodenie(postava, 1)
             print(f"Spôsobené poškodenie: {poskodenie}")
         elif volba == "2":
             print("Zatial nič")
         elif volba == "3":
+            print(postava['inventar'])
+        elif volba == "4":
             hra_bezi = False
         else:
             print("NEPLATNA VOLBA!!!!!!")
