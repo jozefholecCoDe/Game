@@ -30,7 +30,7 @@ def menu():
 
 def vytvor_warriora(postava):
     print(f"Trieda: {postava['trieda']}")
-    return postava["meno"]
+    return postava['meno']
 
 def zobraz_postavu(postava):
     print(f"❤️  HP:        {postava['hp']}")
@@ -49,6 +49,27 @@ def vypocitaj_poskodenie(postava, obrana):
         poskodenie = 1
     return poskodenie
 
+def zran(postav, kolko):
+    poskodenie = kolko - postav['obrana']
+    if poskodenie < 1:
+        poskodenie = 1
+    print(f"Obdrzal si poskodenie: {poskodenie}")
+    postava['hp'] -= poskodenie
+
+def pridaj_do_inventara(postava, predmet):
+    postava['inventar'].append(predmet)
+
+def najsilnejsi_nepriatel(nepriatelia):
+    najsilnejsi = ""
+    najviac_hp = 0
+    for list, hp in nepriatelia.items():
+        if hp['hp'] > najviac_hp:
+            najviac_hp = hp['hp']
+            najsilnejsi = list
+    return najviac_hp, najsilnejsi
+
+
+
 def hlavna_slucka():
     hra_bezi = True
     while hra_bezi:
@@ -63,6 +84,13 @@ def hlavna_slucka():
             print(hp_bar(postava))
             poskodenie = vypocitaj_poskodenie(postava, 1)
             print(f"Spôsobené poškodenie: {poskodenie}")
+            print(postava['hp'])
+            zran(postava, 7)
+            print(postava['hp'])
+            print("Ziskal si predmet: Kladivo")
+            pridaj_do_inventara(postava, "kladivo")
+            print(postava['inventar'])
+            print(najsilnejsi_nepriatel(NEPRIATELIA))
         elif volba == "2":
             print("Zatial nič")
         elif volba == "3":
