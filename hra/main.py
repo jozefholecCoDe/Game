@@ -43,18 +43,16 @@ def hp_bar(postava):
     bar = ("[" + "█" * plne + "·" * (20 - plne) + f"] {postava['hp']}/{postava['hp_max']}")
     return bar
 
-def vypocitaj_poskodenie(postava, obrana):
-    poskodenie = postava['utok'] - obrana
+def vypocitaj_poskodenie(utok, obrana):
+    poskodenie = utok - obrana
     if poskodenie < 1:
         poskodenie = 1
     return poskodenie
 
-def zran(postav, kolko):
-    poskodenie = kolko - postav['obrana']
-    if poskodenie < 1:
-        poskodenie = 1
-    print(f"Obdrzal si poskodenie: {poskodenie}")
-    postava['hp'] -= poskodenie
+def zran(ciel, kolko):
+    ubrane = min(kolko, ciel['hp'])
+    ciel['hp'] -= ubrane
+    return ubrane
 
 def pridaj_do_inventara(postava, predmet):
     postava['inventar'].append(predmet)
@@ -62,10 +60,10 @@ def pridaj_do_inventara(postava, predmet):
 def najsilnejsi_nepriatel(nepriatelia):
     najsilnejsi = ""
     najviac_hp = 0
-    for list, hp in nepriatelia.items():
-        if hp['hp'] > najviac_hp:
-            najviac_hp = hp['hp']
-            najsilnejsi = list
+    for kluc, data in nepriatelia.items():
+        if data['hp'] > najviac_hp:
+            najviac_hp = data['hp']
+            najsilnejsi = kluc
     return najviac_hp, najsilnejsi
 
 
@@ -82,10 +80,10 @@ def hlavna_slucka():
             print(f"Vitaj {meno}!")
             zobraz_postavu(postava)
             print(hp_bar(postava))
-            poskodenie = vypocitaj_poskodenie(postava, 1)
-            print(f"Spôsobené poškodenie: {poskodenie}")
+            poskodenie = vypocitaj_poskodenie(NEPRIATELIA ['vlk']['utok'], postava['obrana'])
             print(postava['hp'])
-            zran(postava, 7)
+            aktualne = zran(postava, poskodenie)
+            print(f"Spôsobené poškodenie VLKOM: {aktualne}")
             print(postava['hp'])
             print("Ziskal si predmet: Kladivo")
             pridaj_do_inventara(postava, "kladivo")
