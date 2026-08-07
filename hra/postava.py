@@ -8,7 +8,7 @@ def vytvor_warriora(postava, meno):
     postava['zdroj'] = 0
     postava['level'] = 1
     postava['xp'] = 0
-    postava['inventar'] = "D6"
+    postava['inventar'] = ["D6"]
 
 def vytvor_rogue(postava, meno):
     postava['meno'] = meno
@@ -20,7 +20,7 @@ def vytvor_rogue(postava, meno):
     postava['zdroj'] = 0
     postava['level'] = 1
     postava['xp'] = 0
-    postava['inventar'] = "D3"
+    postava['inventar'] = ["D3"]
 
 def vytvor_mage(postava, meno):
     postava['meno'] = meno
@@ -32,7 +32,7 @@ def vytvor_mage(postava, meno):
     postava['zdroj'] = 0
     postava['level'] = 1
     postava['xp'] = 0
-    postava['inventar'] = ""
+    postava['inventar'] = []
 
 def pridaj_do_inventara(postava, predmet):
     postava['inventar'].append(predmet)
