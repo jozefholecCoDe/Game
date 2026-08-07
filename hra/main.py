@@ -12,16 +12,21 @@ def hlavna_slucka():
         volba = input("> ")
         if volba == "1":
             meno = input("Zadaj meno: ")
-            ui.vyber_triedu()
-            trieda = input("Vyber triedu: ")
-            if trieda == "1":
-                postavy.vytvor_warriora(data.postava, meno)
-            elif trieda == "2":
-                postavy.vytvor_rogue(data.postava, meno)
-            elif trieda == "3":
-                postavy.vytvor_mage(data.postava, meno)
-            else:
-                print("NEPLATNA VOLBA!!!!!!")
+            vyber = True
+            while vyber:
+                ui.vyber_triedu()
+                trieda = input("Vyber triedu: ")
+                if trieda == "1":
+                    postavy.vytvor_warriora(data.postava, meno)
+                    break
+                elif trieda == "2":
+                    postavy.vytvor_rogue(data.postava, meno)
+                    break
+                elif trieda == "3":
+                    postavy.vytvor_mage(data.postava, meno)
+                    break
+                else:
+                    print("NEPLATNA VOLBA!!!!!!")
 
             ui.zobraz_postavu(data.postava)
             bar = ui.hp_bar(data.postava)
