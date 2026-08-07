@@ -11,23 +11,20 @@ def menu():
     print("3 - Inventar")
     print("4 - Koniec")
 
+def vyber_triedu():
+    print("1 - War")
+    print("2 - Rogue")
+    print("3 - Mage")
+
 def zobraz_postavu(postava):
     print(f"Vitaj {postava['meno']}!")
+    print(f"Trieda: {postava['trieda']}")
     print(f"❤️  HP:        {postava['hp']}")
     print(f"⚔️  Útok:      {postava['utok']}")
     print(f"🛡️  Obrana:    {postava['obrana']}")
-    print(f"🔥 Rage:       {postava['rage']}")
+    print(f"🔥 Rage:       {postava['zdroj']}")
 
 def hp_bar(postava):
     plne = postava['hp'] * konstanty.SIRKA_HP_BARU // postava['hp_max']
     bar = ("[" + "█" * plne + "·" * (konstanty.SIRKA_HP_BARU - plne) + f"] {postava['hp']}/{postava['hp_max']}")
-    print(f"{bar}")
-
-def najsilnejsi_nepriatel(nepriatelia):
-    najsilnejsi = ""
-    najviac_hp = 0
-    for kluc, data in nepriatelia.items():
-        if data['hp'] > najviac_hp:
-            najviac_hp = data['hp']
-            najsilnejsi = kluc
-    return najviac_hp, najsilnejsi
+    return bar

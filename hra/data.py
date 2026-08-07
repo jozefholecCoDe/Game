@@ -5,14 +5,23 @@ NEPRIATELIA = {
 }
 
 postava = {
-    "meno": "Kael",
-    "trieda": "warrior",
-    "hp": 30,
-    "hp_max": 30,
-    "utok": 5,
-    "obrana": 2,
-    "rage": 0,
-    "level": 1,
+    "meno": "",
+    "trieda": "",
+    "hp": 0,
+    "hp_max": 0,
+    "utok": 0,
+    "obrana": 0,
+    "zdroj": 0,
+    "level": 0,
     "xp": 0,
-    "inventar": ["D6"],
+    "inventar": [""],
 }
+
+def najsilnejsi_nepriatel(nepriatelia):
+    najsilnejsi = ""
+    najviac_hp = 0
+    for kluc, data in nepriatelia.items():
+        if data['hp'] > najviac_hp:
+            najviac_hp = data['hp']
+            najsilnejsi = kluc
+    return najviac_hp, najsilnejsi
