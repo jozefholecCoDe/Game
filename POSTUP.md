@@ -6,13 +6,13 @@ Dopisuj si aj poznámky — čo bolo ťažké, na čom si sa zasekol.
 ## Fáza 0 — základy
 - [x] 00 Založenie projektu (Python, VS Code, venv, git)
 - [x] 00b VS Code v dennej práci
-- [ ] 01 Prvý skript
-- [ ] 02 Rozhodovanie a slučky
-- [ ] 03 Funkcie
-- [ ] 04 Zoznamy a slovníky
+- [x] 01 Prvý skript
+- [x] 02 Rozhodovanie a slučky
+- [x] 03 Funkcie
+- [x] 04 Zoznamy a slovníky
 
 ## Fáza 1 — data-driven základ
-- [ ] 05 Moduly a štruktúra
+- [x] 05 Moduly a štruktúra
 - [ ] 06 JSON a dáta
 - [ ] 07 Triedy a objekty
 
