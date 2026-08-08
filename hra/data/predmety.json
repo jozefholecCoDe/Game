@@ -1,0 +1,109 @@
+{
+  "kovacske_kladivo": {
+    "styl": "blizko",
+    "uchop": "2H",
+    "utok": 4,
+    "obrana": 0,
+    "crit": 0,
+    "stun": 0,
+    "krvacanie": 0,
+    "sanca_na_bonus": 8,
+    "bonus_utoku": 4
+  },
+
+  "mala_dyka": {
+    "styl": "blizko",
+    "uchop": "1H",
+    "utok": 2,
+    "obrana": 0,
+    "crit": 2,
+    "stun": 0,
+    "krvacanie": 1,
+    "sanca_na_bonus": 5,
+    "bonus_utoku": 2
+  },
+
+  "drevena_palica": {
+    "styl": "dialka",
+    "uchop": "2H",
+    "utok": 6,
+    "obrana": 0,
+    "crit": 0,
+    "stun": 2,
+    "krvacanie": 0,
+    "sanca_na_bonus": 2,
+    "bonus_utoku": 4
+  },
+
+  "zbroj": {
+    "styl": "platova",
+    "uchop": null,
+    "utok": 0,
+    "obrana": 6,
+    "crit": 0,
+    "stun": 0,
+    "uhyb": -2,
+    "sanca_na_bonus": null,
+    "bonus_utoku": null
+  },
+
+  "tunika": {
+    "styl": "kozena",
+    "uchop": null,
+    "utok": 0,
+    "obrana": 4,
+    "crit": 0,
+    "stun": 0,
+    "uhyb": 2,
+    "sanca_na_bonus": null,
+    "bonus_utoku": null
+  },
+
+  "habit": {
+    "styl": "latka",
+    "uchop": null,
+    "utok": 0,
+    "obrana": 2,
+    "crit": 0,
+    "stun": 0,
+    "uhyb": 4,
+    "sanca_na_bonus": null,
+    "bonus_utoku": null
+  },
+
+  "D4": {
+    "utok": 4,
+    "sanca_na_bonus": null,
+    "bonus_utoku": null
+  },
+
+  "D6": {
+    "utok": 6,
+    "sanca_na_bonus": null,
+    "bonus_utoku": null
+  },
+
+  "D8": {
+    "utok": 8,
+    "sanca_na_bonus": null,
+    "bonus_utoku": null
+  },
+
+  "D10": {
+    "utok": 10,
+    "sanca_na_bonus": null,
+    "bonus_utoku": null
+  },
+
+  "D12": {
+    "utok": 12,
+    "sanca_na_bonus": null,
+    "bonus_utoku": null
+  },
+
+  "D20": {
+    "utok": 20,
+    "sanca_na_bonus": null,
+    "bonus_utoku": null
+  }
+}

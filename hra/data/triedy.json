@@ -1,0 +1,34 @@
+{
+  "warrior": {
+    "nazov": "Warrior",
+    "ikona": "⚔️",
+    "odomknute": true,
+    "hp_max": 30,
+    "utok": 5,
+    "obrana": 2,
+    "resource": {"id": "rage", "nazov": "Rage", "ikona": "🔥", "max": 50},
+    "startovaci_inventar": ["kovacske_kladivo", "d6"]
+  },
+
+  "mage": {
+    "nazov": "Rogue",
+    "ikona": "🗡️",
+    "odomknute": false,
+    "hp_max": 25,
+    "utok": 7,
+    "obrana": 1,
+    "resource": {"id": "points", "nazov": "Point", "ikona": "⭕", "max": 5},
+    "startovaci_inventar": ["mala_dyka", "d4"]
+  },
+
+  "rogue": {
+    "nazov": "mage",
+    "ikona": "🪄",
+    "odomknute": false,
+    "hp_max": 20,
+    "utok": 10,
+    "obrana": 0,
+    "resource": {"id": "mana", "nazov": "Mana", "ikona": "💧", "max": 100},
+    "startovaci_inventar": ["drevena_palica"]
+  }
+}

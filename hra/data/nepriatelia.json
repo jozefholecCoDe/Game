@@ -1,0 +1,27 @@
+{
+    "vlk":{
+      "meno": "Hladný vlk",
+      "ikona": "🐺",
+      "hp": 12,
+      "utok": 4,
+      "obrana": 0,
+      "xp": 10
+    },
+
+    "zbojnik":{
+      "meno": "Zbojník",
+      "ikona": "☠️",
+      "hp": 18,
+      "utok": 5,
+      "obrana": 1,
+      "xp": 15
+    },
+
+    "grimjaw":{
+      "meno": "Grimjaw",
+      "ikona": "🫅",
+      "hp": 34,
+      "utok": 8,
+      "obrana": 3,
+      "xp": 40}
+}
