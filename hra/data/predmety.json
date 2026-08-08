@@ -1,5 +1,7 @@
 {
   "kovacske_kladivo": {
+    "nazov": "Kováčske kladivo",
+    "slot": "zbran",
     "styl": "blizko",
     "uchop": "2H",
     "utok": 4,
@@ -12,6 +14,8 @@
   },
 
   "mala_dyka": {
+    "nazov": "Malý dýka",
+    "slot": "zbran",
     "styl": "blizko",
     "uchop": "1H",
     "utok": 2,
@@ -24,6 +28,8 @@
   },
 
   "drevena_palica": {
+    "nazov": "Drevená palica",
+    "slot": "zbran",
     "styl": "dialka",
     "uchop": "2H",
     "utok": 6,
@@ -35,19 +41,23 @@
     "bonus_utoku": 4
   },
 
-  "zbroj": {
-    "styl": "platova",
+  "kovacska_zastera": {
+    "nazov": "Kováčska zástera",
+    "slot": "brnenie",
+    "styl": "kozana",
     "uchop": null,
     "utok": 0,
     "obrana": 6,
     "crit": 0,
     "stun": 0,
-    "uhyb": -2,
+    "uhyb": 0,
     "sanca_na_bonus": null,
     "bonus_utoku": null
   },
 
   "tunika": {
+    "nazov": "Tunika",
+    "slot": "brnenie",
     "styl": "kozena",
     "uchop": null,
     "utok": 0,
@@ -60,6 +70,8 @@
   },
 
   "habit": {
+    "nazov": "Hábit",
+    "slot": "brnenie",
     "styl": "latka",
     "uchop": null,
     "utok": 0,
@@ -72,37 +84,49 @@
   },
 
   "D4": {
-    "utok": 4,
+    "nazov": "D4",
+    "slot": "kocka",
+    "kocka_stien": 4,
     "sanca_na_bonus": null,
     "bonus_utoku": null
   },
 
   "D6": {
-    "utok": 6,
+    "nazov": "D6",
+    "slot": "kocka",
+    "kocka_stien": 6,
     "sanca_na_bonus": null,
     "bonus_utoku": null
   },
 
   "D8": {
-    "utok": 8,
+    "nazov": "D8",
+    "slot": "kocka",
+    "kocka_stien": 8,
     "sanca_na_bonus": null,
     "bonus_utoku": null
   },
 
   "D10": {
-    "utok": 10,
+    "nazov": "D10",
+    "slot": "kocka",
+    "kocka_stien": 10,
     "sanca_na_bonus": null,
     "bonus_utoku": null
   },
 
   "D12": {
-    "utok": 12,
+    "nazov": "D12",
+    "slot": "kocka",
+    "kocka_stien": 12,
     "sanca_na_bonus": null,
     "bonus_utoku": null
   },
 
   "D20": {
-    "utok": 20,
+    "nazov": "D20",
+    "slot": "kocka",
+    "kocka_stien": 20,
     "sanca_na_bonus": null,
     "bonus_utoku": null
   }
