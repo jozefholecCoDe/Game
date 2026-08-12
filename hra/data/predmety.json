@@ -41,6 +41,20 @@
     "bonus_utoku": 4
   },
 
+  "luk": {
+    "nazov": "Luk",
+    "slot": "zbran",
+    "styl": "dialka",
+    "uchop": "2H",
+    "utok": 6,
+    "obrana": 0,
+    "crit": 2,
+    "stun": 0,
+    "krvacanie": 0,
+    "sanca_na_bonus": 2,
+    "bonus_utoku": 2
+  },
+
   "kovacska_zastera": {
     "nazov": "Kováčska zástera",
     "slot": "brnenie",
@@ -83,7 +97,7 @@
     "bonus_utoku": null
   },
 
-  "D4": {
+  "d4": {
     "nazov": "D4",
     "slot": "kocka",
     "kocka_stien": 4,
@@ -91,7 +105,7 @@
     "bonus_utoku": null
   },
 
-  "D6": {
+  "d6": {
     "nazov": "D6",
     "slot": "kocka",
     "kocka_stien": 6,
@@ -99,7 +113,7 @@
     "bonus_utoku": null
   },
 
-  "D8": {
+  "d8": {
     "nazov": "D8",
     "slot": "kocka",
     "kocka_stien": 8,
@@ -107,7 +121,7 @@
     "bonus_utoku": null
   },
 
-  "D10": {
+  "d10": {
     "nazov": "D10",
     "slot": "kocka",
     "kocka_stien": 10,
@@ -115,7 +129,7 @@
     "bonus_utoku": null
   },
 
-  "D12": {
+  "d12": {
     "nazov": "D12",
     "slot": "kocka",
     "kocka_stien": 12,
@@ -123,7 +137,7 @@
     "bonus_utoku": null
   },
 
-  "D20": {
+  "d20": {
     "nazov": "D20",
     "slot": "kocka",
     "kocka_stien": 20,

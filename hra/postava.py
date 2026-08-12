@@ -1,38 +1,27 @@
-def vytvor_warriora(postava, meno):
-    postava['meno'] = meno
-    postava['trieda'] = "warrior"
-    postava['hp'] = 30
-    postava['hp_max'] = 30
-    postava['utok'] = 5
-    postava['obrana'] = 2
-    postava['zdroj'] = 0
-    postava['level'] = 1
-    postava['xp'] = 0
-    postava['inventar'] = ["D6"]
+from hra import data_loader
 
-def vytvor_rogue(postava, meno):
-    postava['meno'] = meno
-    postava['trieda'] = "rogue"
-    postava['hp'] = 25
-    postava['hp_max'] = 25
-    postava['utok'] = 6
-    postava['obrana'] = 1
-    postava['zdroj'] = 0
-    postava['level'] = 1
-    postava['xp'] = 0
-    postava['inventar'] = ["D3"]
+def vytvor_postavu(postava, trieda_id, meno):
+    if trieda_id not in data_loader.TRIEDY:
+        print("Nesprávny výber triedy!")
+        return True
 
-def vytvor_mage(postava, meno):
-    postava['meno'] = meno
-    postava['trieda'] = "mage"
-    postava['hp'] = 20
-    postava['hp_max'] = 20
-    postava['utok'] = 10
-    postava['obrana'] = 0
-    postava['zdroj'] = 0
-    postava['level'] = 1
-    postava['xp'] = 0
-    postava['inventar'] = []
+    t = data_loader.TRIEDY[trieda_id]
+    if t['odomknute'] == True:
+        postava['meno'] = meno
+        postava['trieda'] = t['nazov']
+        postava['hp'] = t['hp_max']
+        postava['hp_max'] = t['hp_max']
+        postava['utok'] = t['utok']
+        postava['obrana'] = t['obrana']
+        postava['zdroj'] = 0
+        postava['zdroj_max'] = t['resource']['max']
+        postava['level'] = 1
+        postava['xp'] = 0
+        postava['inventar'] = list(t['startovaci_inventar'])
+        return False
+    else:
+        print("Postava je uzamknuta!")
+        return True
 
 def pridaj_do_inventara(postava, predmet):
     postava['inventar'].append(predmet)

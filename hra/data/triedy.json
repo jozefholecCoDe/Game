@@ -1,5 +1,5 @@
 {
-  "warrior": {
+  "1": {
     "nazov": "Warrior",
     "ikona": "⚔️",
     "odomknute": true,
@@ -7,10 +7,12 @@
     "utok": 5,
     "obrana": 2,
     "resource": {"id": "rage", "nazov": "Rage", "ikona": "🔥", "max": 20},
-    "startovaci_inventar": ["kovacske_kladivo", "D6"]
+    "level": 1,
+    "xp": 0,
+    "startovaci_inventar": ["kovacske_kladivo", "d6"]
   },
 
-  "rogue": {
+  "2": {
     "nazov": "Rogue",
     "ikona": "🗡️",
     "odomknute": false,
@@ -18,17 +20,34 @@
     "utok": 7,
     "obrana": 1,
     "resource": {"id": "points", "nazov": "Point", "ikona": "⭕", "max": 5},
-    "startovaci_inventar": ["mala_dyka", "D4"]
+    "level": 1,
+    "xp": 0,
+    "startovaci_inventar": ["mala_dyka", "d4"]
   },
 
-  "mage": {
-    "nazov": "mage",
+  "3": {
+    "nazov": "Mage",
     "ikona": "🪄",
     "odomknute": false,
     "hp_max": 20,
     "utok": 10,
     "obrana": 0,
     "resource": {"id": "mana", "nazov": "Mana", "ikona": "💧", "max": 50},
+    "level": 1,
+    "xp": 0,
     "startovaci_inventar": ["drevena_palica"]
+  },
+
+  "4": {
+    "nazov": "Ranger",
+    "ikona": "🏹",
+    "odomknute": true,
+    "hp_max": 25,
+    "utok": 8,
+    "obrana": 0,
+    "resource": {"id": "focus", "nazov": "Focus", "ikona": "🎯", "max": 30},
+    "level": 1,
+    "xp": 0,
+    "startovaci_inventar": ["luk"]
   }
 }

@@ -1,5 +1,6 @@
 from hra import ui
 from hra import data
+from hra import data_loader
 from hra import suboj
 from hra import postava as postavy
 
@@ -15,23 +16,15 @@ def hlavna_slucka():
             vyber = True
             while vyber:
                 ui.vyber_triedu()
-                trieda = input("Vyber triedu: ")
-                if trieda == "1":
-                    postavy.vytvor_warriora(data.postava, meno)
-                    break
-                elif trieda == "2":
-                    postavy.vytvor_rogue(data.postava, meno)
-                    break
-                elif trieda == "3":
-                    postavy.vytvor_mage(data.postava, meno)
-                    break
-                else:
-                    print("NEPLATNA VOLBA!!!!!!")
+                vyber_postavu = input("Vyber triedu: ")
+                vybrane = postavy.vytvor_postavu(data.postava, vyber_postavu, meno)
+                vyber = vybrane
+
 
             ui.zobraz_postavu(data.postava)
             bar = ui.hp_bar(data.postava)
             print(f"{bar}")
-            poskodenie = suboj.vypocitaj_poskodenie(data.NEPRIATELIA ['vlk']['utok'], data.postava['obrana'])
+            poskodenie = suboj.vypocitaj_poskodenie(data_loader.NEPRIATELIA ['vlk']['utok'], data.postava['obrana'])
             print(data.postava['hp'])
             aktualne = suboj.zran(data.postava, poskodenie)
             print(f"Spôsobené poškodenie VLKOM: {aktualne}")
@@ -39,7 +32,7 @@ def hlavna_slucka():
             print("Ziskal si predmet: Kladivo")
             postavy.pridaj_do_inventara(data.postava, "kladivo")
             print(data.postava['inventar'])
-            najsilnejsi = data.najsilnejsi_nepriatel(data.NEPRIATELIA)
+            najsilnejsi = data.najsilnejsi_nepriatel(data_loader.NEPRIATELIA)
             print(f"{najsilnejsi}")
         elif volba == "2":
             print("Zatial nič")

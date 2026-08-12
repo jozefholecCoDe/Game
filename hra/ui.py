@@ -1,4 +1,5 @@
 from hra import konstanty
+from hra import data_loader
 
 def hlavicka():
     print("==============================")
@@ -12,9 +13,11 @@ def menu():
     print("4 - Koniec")
 
 def vyber_triedu():
-    print("1 - War")
-    print("2 - Rogue")
-    print("3 - Mage")
+    for cislo, (tid, t) in enumerate(data_loader.TRIEDY.items(), start=1):
+        if t['odomknute']:
+            print(f"{cislo} - {t['ikona']} {t['nazov']}")
+        else:
+            print(f"{cislo} - {t['ikona']} {t['nazov']} 🔐")
 
 def zobraz_postavu(postava):
     print(f"Vitaj {postava['meno']}!")
