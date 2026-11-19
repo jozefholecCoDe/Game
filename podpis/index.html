@@ -52,7 +52,7 @@
   button { font: inherit; }
 
   header.bar {
-    position: sticky; top: 0; z-index: 20;
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
   }
@@ -335,8 +335,17 @@
     const f = e.dataTransfer && e.dataTransfer.files[0];
     if (f) loadFile(f);
   });
+  // Dvojklikové potvrdenie (okno confirm() na zverejnenej stránke nefunguje)
+  let newArmed = null;
+  const btnNewLbl = els.btnNew.querySelector('.lbl-long');
   els.btnNew.addEventListener('click', () => {
-    if (state.placements.length && !confirm('Zahodiť aktuálny dokument a vložené podpisy?')) return;
+    if (state.placements.length && !newArmed) {
+      btnNewLbl.textContent = 'Naozaj zahodiť?';
+      btnNewLbl.style.display = 'inline';
+      newArmed = setTimeout(() => { newArmed = null; btnNewLbl.textContent = 'Nový'; btnNewLbl.style.display = ''; }, 3000);
+      return;
+    }
+    clearTimeout(newArmed); newArmed = null; btnNewLbl.textContent = 'Nový'; btnNewLbl.style.display = '';
     resetDoc();
     els.fileInput.click();
   });
@@ -698,6 +707,7 @@
       toast('Hotovo — podpísaný dokument sa stiahol.');
     } catch (err) {
       console.error(err);
+      if (err && err.code === 'declined') { toast('Sťahovanie zrušené.'); return; }
       toast(window.PDFLib ? 'Export sa nepodaril.' : 'Nepodarilo sa načítať knižnicu na PDF (skontrolujte internet).');
     } finally {
       updateUI();
@@ -708,7 +718,10 @@
     const base = state.doc.name.replace(/\.[^.]+$/, '');
     return `${base}_podpisany.${ext}`;
   }
-  function download(blob, name) {
+  async function download(blob, name) {
+    // Na zverejnenej stránke (claude.ai) sa sťahuje cez povolenie "downloads"
+    const dl = window.claude && window.claude.use ? await window.claude.use('downloads').catch(() => null) : null;
+    if (dl) { await dl.save({ filename: name, data: blob }); return; }
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = name;
@@ -748,7 +761,7 @@
       page.drawImage(img, { x: box.x + u, y: box.y + v, width: iw, height: ih, rotate: degrees(rot) });
     }
     const out = await pdfDoc.save();
-    download(new Blob([out], { type: 'application/pdf' }), signedName('pdf'));
+    await download(new Blob([out], { type: 'application/pdf' }), signedName('pdf'));
   }
 
   async function exportImage() {
@@ -764,7 +777,7 @@
       ctx.drawImage(s, p.x * W, p.y * H, p.w * W, p.h * H);
     }
     const blob = await new Promise(res => c.toBlob(res, 'image/png'));
-    download(blob, signedName('png'));
+    await download(blob, signedName('png'));
   }
 
   updateUI();
