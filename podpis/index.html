@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Podpis dokumentu</title>
+<style>
+  :root {
+    --bg: #f4f4f1;
+    --surface: #ffffff;
+    --surface-2: #ecebe6;
+    --text: #1d1d1b;
+    --muted: #6b6a64;
+    --border: #d6d4cc;
+    --accent: #2f5bd3;
+    --accent-text: #ffffff;
+    --danger: #c23b2f;
+    --shadow: 0 1px 2px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
+    --page-shadow: 0 2px 10px rgba(0,0,0,.12);
+    --pad-bg: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #161615;
+      --surface: #1f1f1d;
+      --surface-2: #2a2a27;
+      --text: #ecebe6;
+      --muted: #a3a29b;
+      --border: #3a3a36;
+      --accent: #6d8ff0;
+      --accent-text: #0f1220;
+      --danger: #ef6b5f;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+      --page-shadow: 0 2px 14px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #161615; --surface: #1f1f1d; --surface-2: #2a2a27; --text: #ecebe6;
+    --muted: #a3a29b; --border: #3a3a36; --accent: #6d8ff0; --accent-text: #0f1220;
+    --danger: #ef6b5f; --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+    --page-shadow: 0 2px 14px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+  }
+  button { font: inherit; }
+
+  header.bar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .bar-inner {
+    max-width: 960px; margin: 0 auto; padding: 10px 16px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  }
+  .brand { font-weight: 650; font-size: 16px; margin-right: auto; display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .brand .file { font-weight: 400; color: var(--muted); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    padding: 7px 12px; border-radius: 8px; cursor: pointer; white-space: nowrap;
+  }
+  .btn:hover { background: var(--surface-2); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+  .btn.primary:hover { filter: brightness(1.08); }
+  .btn.ghost { border-color: transparent; background: transparent; }
+  .btn svg { width: 16px; height: 16px; }
+
+  .sig-chip {
+    display: none; align-items: center; gap: 6px;
+    border: 1px dashed var(--border); border-radius: 8px; padding: 3px 8px;
+    background: var(--pad-bg); cursor: pointer; height: 36px;
+  }
+  .sig-chip.show { display: inline-flex; }
+  .sig-chip.armed { border: 2px solid var(--accent); }
+  .sig-chip img { height: 26px; max-width: 110px; object-fit: contain; }
+
+  main { max-width: 960px; margin: 0 auto; padding: 24px 16px 80px; }
+
+  .hint {
+    margin: 0 0 16px; padding: 10px 14px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted); font-size: 14px;
+  }
+  .hint strong { color: var(--text); font-weight: 600; }
+
+  /* Drop zone */
+  .drop {
+    border: 2px dashed var(--border); border-radius: 16px; background: var(--surface);
+    padding: 56px 20px; text-align: center; cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  .drop.over { border-color: var(--accent); background: var(--surface-2); }
+  .drop h1 { font-size: 22px; margin: 12px 0 6px; font-weight: 650; }
+  .drop p { margin: 0; color: var(--muted); }
+  .drop .icon { width: 48px; height: 48px; color: var(--accent); }
+  .drop .privacy { margin-top: 18px; font-size: 13px; }
+
+  /* Pages */
+  #pages { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+  .page-wrap { width: 100%; max-width: 880px; }
+  .page-label { font-size: 12px; color: var(--muted); margin: 0 0 6px 2px; }
+  .page {
+    position: relative; width: 100%; background: #fff; box-shadow: var(--page-shadow);
+    user-select: none; -webkit-user-select: none; touch-action: pan-y;
+  }
+  .page canvas, .page > img.doc { display: block; width: 100%; height: auto; }
+  body.placing .page { cursor: crosshair; }
+
+  .ghost {
+    position: absolute; pointer-events: none; opacity: .55; display: none;
+  }
+  .ghost img { width: 100%; height: 100%; display: block; }
+
+  .placed {
+    position: absolute; cursor: move; touch-action: none;
+    outline: 1px dashed transparent; outline-offset: 2px;
+  }
+  .placed img { width: 100%; height: 100%; display: block; pointer-events: none; }
+  .placed:hover, .placed.selected { outline-color: var(--accent); }
+  .placed .handle, .placed .del {
+    position: absolute; display: none; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); color: #fff; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    align-items: center; justify-content: center; padding: 0; cursor: pointer;
+  }
+  .placed.selected .handle, .placed.selected .del, .placed:hover .handle, .placed:hover .del { display: flex; }
+  .placed .handle { right: -12px; bottom: -12px; cursor: nwse-resize; touch-action: none; }
+  .placed .del { right: -12px; top: -12px; background: var(--danger); }
+  .placed .del svg { width: 12px; height: 12px; }
+  .placed .handle svg { width: 12px; height: 12px; }
+
+  /* Dialog */
+  dialog {
+    border: 1px solid var(--border); border-radius: 14px; padding: 0;
+    background: var(--surface); color: var(--text); box-shadow: var(--shadow);
+    width: min(680px, calc(100vw - 32px)); max-height: calc(100vh - 32px);
+  }
+  dialog::backdrop { background: rgba(0,0,0,.45); }
+  .dlg-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 6px; }
+  .dlg-head h2 { margin: 0; font-size: 17px; font-weight: 650; }
+  .dlg-body { padding: 6px 16px 12px; }
+  .pad-wrap {
+    position: relative; border: 1px solid var(--border); border-radius: 10px; background: var(--pad-bg);
+    aspect-ratio: 3 / 1; min-height: 160px; overflow: hidden;
+  }
+  #pad { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+  .pad-line {
+    position: absolute; left: 6%; right: 6%; bottom: 26%; border-bottom: 1px solid #c9c7bf; pointer-events: none;
+  }
+  .pad-x { position: absolute; left: 6%; bottom: 27%; color: #a9a79f; font-size: 20px; pointer-events: none; }
+  .pad-placeholder {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: #a9a79f; pointer-events: none; font-size: 15px;
+  }
+  .pad-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 12px; }
+  .swatches { display: flex; gap: 8px; align-items: center; }
+  .swatch {
+    width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--surface); cursor: pointer;
+    box-shadow: 0 0 0 1px var(--border); padding: 0;
+  }
+  .swatch.active { box-shadow: 0 0 0 2px var(--accent); }
+  .tool-label { font-size: 13px; color: var(--muted); }
+  input[type=range] { accent-color: var(--accent); width: 110px; }
+  .dlg-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid var(--border); }
+  .spacer { flex: 1; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 14px;
+    opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 50; max-width: calc(100vw - 32px);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .loading { text-align: center; color: var(--muted); padding: 40px 0; }
+  [hidden] { display: none !important; }
+
+  @media (max-width: 560px) {
+    .btn .lbl-long { display: none; }
+    .brand .file { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-inner">
+    <div class="brand">
+      <span>Podpis dokumentu</span>
+      <span class="file" id="fileName"></span>
+    </div>
+    <button class="sig-chip" id="sigChip" title="Kliknite a potom kliknite do dokumentu, kam chcete podpis vložiť">
+      <img id="sigChipImg" alt="Váš podpis">
+    </button>
+    <button class="btn" id="btnDraw" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      <span id="btnDrawLbl">Nakresliť podpis</span>
+    </button>
+    <button class="btn primary" id="btnDownload" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+      <span>Stiahnuť<span class="lbl-long"> podpísaný</span></span>
+    </button>
+    <button class="btn ghost" id="btnNew" hidden title="Nahrať iný dokument">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+      <span class="lbl-long">Nový</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <input type="file" id="fileInput" accept="application/pdf,image/png,image/jpeg,image/webp" hidden>
+
+  <section id="dropZone" class="drop" tabindex="0" role="button" aria-label="Nahrať dokument">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6"/><path d="M12 18v-6"/><path d="m9 15 3-3 3 3"/></svg>
+    <h1>Nahrajte dokument</h1>
+    <p>Pretiahnite sem súbor alebo kliknite a vyberte ho &middot; PDF, PNG, JPG</p>
+    <p class="privacy">Všetko prebieha len vo vašom prehliadači &mdash; dokument sa nikam neodosiela.</p>
+  </section>
+
+  <p class="hint" id="hint" hidden></p>
+  <div class="loading" id="loading" hidden>Načítavam dokument…</div>
+  <div id="pages"></div>
+</main>
+
+<dialog id="padDialog">
+  <div class="dlg-head">
+    <h2>Nakreslite svoj podpis</h2>
+    <button class="btn ghost" id="padClose" aria-label="Zavrieť">✕</button>
+  </div>
+  <div class="dlg-body">
+    <div class="pad-wrap" id="padWrap">
+      <div class="pad-line"></div>
+      <div class="pad-x">×</div>
+      <div class="pad-placeholder" id="padPlaceholder">Podpíšte sa myšou (alebo prstom) sem</div>
+      <canvas id="pad"></canvas>
+    </div>
+    <div class="pad-tools">
+      <div class="swatches" role="radiogroup" aria-label="Farba">
+        <span class="tool-label">Farba</span>
+        <button class="swatch active" data-color="#111111" style="background:#111111" aria-label="Čierna"></button>
+        <button class="swatch" data-color="#1f3fa8" style="background:#1f3fa8" aria-label="Modrá"></button>
+        <button class="swatch" data-color="#0b6b3a" style="background:#0b6b3a" aria-label="Zelená"></button>
+      </div>
+      <label class="tool-label" style="display:flex;align-items:center;gap:8px">
+        Hrúbka <input type="range" id="thickness" min="1" max="8" step="0.5" value="3">
+      </label>
+      <div class="spacer"></div>
+      <button class="btn" id="padUndo">Späť</button>
+      <button class="btn" id="padClear">Vymazať</button>
+    </div>
+  </div>
+  <div class="dlg-foot">
+    <button class="btn" id="padCancel">Zrušiť</button>
+    <button class="btn primary" id="padSave">Použiť podpis</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script>
+(() => {
+  'use strict';
+
+  const PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
+
+  const $ = (id) => document.getElementById(id);
+  const els = {
+    fileInput: $('fileInput'), dropZone: $('dropZone'), pages: $('pages'), hint: $('hint'),
+    loading: $('loading'), fileName: $('fileName'), btnDraw: $('btnDraw'), btnDrawLbl: $('btnDrawLbl'),
+    btnDownload: $('btnDownload'), btnNew: $('btnNew'), sigChip: $('sigChip'), sigChipImg: $('sigChipImg'),
+    dialog: $('padDialog'), pad: $('pad'), padWrap: $('padWrap'), padPlaceholder: $('padPlaceholder'),
+    thickness: $('thickness'), toast: $('toast'),
+  };
+
+  // ---------- Stav ----------
+  const state = {
+    doc: null,          // { kind: 'pdf'|'image', name, bytes?, imgEl?, pages: [{ el, dispW, dispH }] }
+    signature: null,    // { dataUrl, ratio (h/w) }
+    placing: false,
+    placements: [],     // { id, page, x, y, w, h (zlomky stránky), dataUrl, el }
+    selected: null,
+  };
+  let nextId = 1;
+
+  // ---------- Pomocné ----------
+  let toastTimer;
+  function toast(msg) {
+    els.toast.textContent = msg;
+    els.toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => els.toast.classList.remove('show'), 2800);
+  }
+  function setHint(html) { els.hint.innerHTML = html; els.hint.hidden = !html; }
+  function updateUI() {
+    const hasDoc = !!state.doc;
+    els.dropZone.hidden = hasDoc;
+    els.btnDraw.disabled = !hasDoc;
+    els.btnNew.hidden = !hasDoc;
+    els.btnDownload.disabled = !(hasDoc && state.placements.length);
+    els.btnDrawLbl.textContent = state.signature ? 'Nový podpis' : 'Nakresliť podpis';
+    els.sigChip.classList.toggle('show', !!state.signature);
+    els.sigChip.classList.toggle('armed', state.placing);
+    document.body.classList.toggle('placing', state.placing);
+    if (!hasDoc) setHint('');
+    else if (!state.signature) setHint('<strong>Krok 1:</strong> Kliknite na „Nakresliť podpis“ a podpíšte sa myšou.');
+    else if (state.placing) setHint('<strong>Krok 2:</strong> Kliknite do dokumentu na miesto, kam chcete podpis vložiť. (Esc zruší)');
+    else if (!state.placements.length) setHint('Kliknite na svoj podpis hore v lište a potom do dokumentu.');
+    else setHint('Podpis môžete <strong>posúvať</strong> myšou, meniť veľkosť <strong>modrým bodom</strong> a zmazať <strong>červeným ×</strong>. Ďalší podpis pridáte kliknutím na podpis v lište. Hotovo? <strong>Stiahnuť podpísaný</strong>.');
+  }
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+  // ---------- Nahranie dokumentu ----------
+  els.dropZone.addEventListener('click', () => els.fileInput.click());
+  els.dropZone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); els.fileInput.click(); } });
+  els.fileInput.addEventListener('change', () => { if (els.fileInput.files[0]) loadFile(els.fileInput.files[0]); els.fileInput.value = ''; });
+  ['dragenter', 'dragover'].forEach(t => document.addEventListener(t, (e) => {
+    e.preventDefault();
+    if (!state.doc) els.dropZone.classList.add('over');
+  }));
+  ['dragleave', 'drop'].forEach(t => document.addEventListener(t, (e) => {
+    e.preventDefault();
+    if (t === 'dragleave' && e.relatedTarget) return;
+    els.dropZone.classList.remove('over');
+  }));
+  document.addEventListener('drop', (e) => {
+    const f = e.dataTransfer && e.dataTransfer.files[0];
+    if (f) loadFile(f);
+  });
+  // Dvojklikové potvrdenie (okno confirm() na zverejnenej stránke nefunguje)
+  let newArmed = null;
+  const btnNewLbl = els.btnNew.querySelector('.lbl-long');
+  els.btnNew.addEventListener('click', () => {
+    if (state.placements.length && !newArmed) {
+      btnNewLbl.textContent = 'Naozaj zahodiť?';
+      btnNewLbl.style.display = 'inline';
+      newArmed = setTimeout(() => { newArmed = null; btnNewLbl.textContent = 'Nový'; btnNewLbl.style.display = ''; }, 3000);
+      return;
+    }
+    clearTimeout(newArmed); newArmed = null; btnNewLbl.textContent = 'Nový'; btnNewLbl.style.display = '';
+    resetDoc();
+    els.fileInput.click();
+  });
+
+  function resetDoc() {
+    state.doc = null; state.placements = []; state.selected = null; state.placing = false;
+    els.pages.innerHTML = ''; els.fileName.textContent = '';
+    updateUI();
+  }
+
+  async function loadFile(file) {
+    const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+    const isImg = /^image\/(png|jpe?g|webp)$/.test(file.type);
+    if (!isPdf && !isImg) { toast('Podporované sú súbory PDF, PNG a JPG.'); return; }
+    resetDoc();
+    els.dropZone.hidden = true;
+    els.loading.hidden = false;
+    try {
+      if (isPdf) await loadPdf(file); else await loadImage(file);
+      els.fileName.textContent = file.name;
+    } catch (err) {
+      console.error(err);
+      resetDoc();
+      toast(isPdf && !window.pdfjsLib
+        ? 'Nepodarilo sa načítať knižnicu na PDF (skontrolujte internet).'
+        : 'Súbor sa nepodarilo otvoriť. Nie je poškodený alebo zaheslovaný?');
+    } finally {
+      els.loading.hidden = true;
+      updateUI();
+    }
+  }
+
+  function makePage(index, total, dispW, dispH) {
+    const wrap = document.createElement('div');
+    wrap.className = 'page-wrap';
+    if (total > 1) {
+      const lbl = document.createElement('div');
+      lbl.className = 'page-label';
+      lbl.textContent = `Strana ${index + 1} z ${total}`;
+      wrap.appendChild(lbl);
+    }
+    const page = document.createElement('div');
+    page.className = 'page';
+    page.dataset.index = index;
+    const ghost = document.createElement('div');
+    ghost.className = 'ghost';
+    ghost.innerHTML = '<img alt="">';
+    page.appendChild(ghost);
+    wrap.appendChild(page);
+    els.pages.appendChild(wrap);
+    attachPageEvents(page, index);
+    return { el: page, ghost, dispW, dispH };
+  }
+
+  async function loadPdf(file) {
+    if (!window.pdfjsLib) throw new Error('pdf.js missing');
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    // pdf.js si buffer "zoberie" — dáme mu kópiu, originál potrebujeme na export
+    const pdf = await pdfjsLib.getDocument({ data: bytes.slice() }).promise;
+    const doc = { kind: 'pdf', name: file.name, bytes, pages: [] };
+    state.doc = doc;
+    const targetCssWidth = Math.min(880, els.pages.clientWidth || 880);
+    const dpr = Math.max(window.devicePixelRatio || 1, 1.5);
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const p = await pdf.getPage(i);
+      const base = p.getViewport({ scale: 1 });
+      const scale = (targetCssWidth / base.width) * dpr;
+      const vp = p.getViewport({ scale });
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(vp.width);
+      canvas.height = Math.round(vp.height);
+      const pg = makePage(i - 1, pdf.numPages, base.width, base.height);
+      pg.el.insertBefore(canvas, pg.el.firstChild);
+      doc.pages.push(pg);
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      await p.render({ canvasContext: ctx, viewport: vp }).promise;
+      if (i === 1) els.loading.hidden = true;
+    }
+  }
+
+  async function loadImage(file) {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.className = 'doc';
+    img.alt = file.name;
+    img.draggable = false;
+    await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+    const doc = { kind: 'image', name: file.name, imgEl: img, pages: [] };
+    state.doc = doc;
+    const pg = makePage(0, 1, img.naturalWidth, img.naturalHeight);
+    pg.el.insertBefore(img, pg.el.firstChild);
+    doc.pages.push(pg);
+  }
+
+  // ---------- Vkladanie a úprava podpisov na stránke ----------
+  function pagePoint(pageEl, e) {
+    const r = pageEl.getBoundingClientRect();
+    return { fx: (e.clientX - r.left) / r.width, fy: (e.clientY - r.top) / r.height, r };
+  }
+  function defaultSize(pageIndex) {
+    const pg = state.doc.pages[pageIndex];
+    const w = 0.28; // 28 % šírky strany
+    const h = w * state.signature.ratio * (pg.dispW / pg.dispH);
+    return { w, h };
+  }
+
+  function attachPageEvents(pageEl, index) {
+    pageEl.addEventListener('pointermove', (e) => {
+      const pg = state.doc && state.doc.pages[index];
+      if (!pg) return;
+      if (!state.placing || e.pointerType === 'touch') { pg.ghost.style.display = 'none'; return; }
+      const { fx, fy } = pagePoint(pageEl, e);
+      const { w, h } = defaultSize(index);
+      pg.ghost.style.display = 'block';
+      pg.ghost.firstChild.src = state.signature.dataUrl;
+      Object.assign(pg.ghost.style, pct(clamp(fx - w / 2, 0, 1 - w), clamp(fy - h / 2, 0, 1 - h), w, h));
+    });
+    pageEl.addEventListener('pointerleave', () => {
+      const pg = state.doc && state.doc.pages[index];
+      if (pg) pg.ghost.style.display = 'none';
+    });
+    pageEl.addEventListener('click', (e) => {
+      if (!state.placing) { if (e.target === pageEl || e.target.tagName === 'CANVAS' || e.target.classList.contains('doc')) select(null); return; }
+      const { fx, fy } = pagePoint(pageEl, e);
+      const { w, h } = defaultSize(index);
+      addPlacement(index, clamp(fx - w / 2, 0, 1 - w), clamp(fy - h / 2, 0, 1 - h), w, h);
+      state.placing = false;
+      state.doc.pages[index].ghost.style.display = 'none';
+      updateUI();
+    });
+  }
+
+  function pct(x, y, w, h) {
+    return { left: x * 100 + '%', top: y * 100 + '%', width: w * 100 + '%', height: h * 100 + '%' };
+  }
+
+  function addPlacement(page, x, y, w, h) {
+    const p = { id: nextId++, page, x, y, w, h, dataUrl: state.signature.dataUrl };
+    const el = document.createElement('div');
+    el.className = 'placed';
+    el.innerHTML = `<img alt="Podpis" src="${p.dataUrl}">
+      <button class="del" title="Odstrániť podpis" aria-label="Odstrániť podpis"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <span class="handle" title="Zmeniť veľkosť"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 17 17 7M11 17h6v-6"/></svg></span>`;
+    p.el = el;
+    position(p);
+    state.doc.pages[page].el.appendChild(el);
+    state.placements.push(p);
+    wirePlacement(p);
+    select(p);
+  }
+
+  function position(p) { Object.assign(p.el.style, pct(p.x, p.y, p.w, p.h)); }
+
+  function select(p) {
+    state.selected = p;
+    state.placements.forEach(q => q.el.classList.toggle('selected', q === p));
+  }
+
+  function removePlacement(p) {
+    p.el.remove();
+    state.placements = state.placements.filter(q => q !== p);
+    if (state.selected === p) state.selected = null;
+    updateUI();
+  }
+
+  function wirePlacement(p) {
+    const el = p.el;
+    el.querySelector('.del').addEventListener('click', (e) => { e.stopPropagation(); removePlacement(p); });
+    el.querySelector('.del').addEventListener('pointerdown', (e) => e.stopPropagation());
+    el.addEventListener('click', (e) => e.stopPropagation());
+
+    // posun
+    el.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.handle') || e.target.closest('.del')) return;
+      e.preventDefault();
+      select(p);
+      const pageEl = state.doc.pages[p.page].el;
+      const r = pageEl.getBoundingClientRect();
+      const start = { cx: e.clientX, cy: e.clientY, x: p.x, y: p.y };
+      el.setPointerCapture(e.pointerId);
+      const move = (ev) => {
+        p.x = clamp(start.x + (ev.clientX - start.cx) / r.width, 0, 1 - p.w);
+        p.y = clamp(start.y + (ev.clientY - start.cy) / r.height, 0, 1 - p.h);
+        position(p);
+      };
+      const up = () => { el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up); };
+      el.addEventListener('pointermove', move);
+      el.addEventListener('pointerup', up);
+      el.addEventListener('pointercancel', up);
+    });
+
+    // zmena veľkosti (so zachovaním pomeru strán)
+    const handle = el.querySelector('.handle');
+    handle.addEventListener('pointerdown', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      select(p);
+      const pageEl = state.doc.pages[p.page].el;
+      const r = pageEl.getBoundingClientRect();
+      const aspect = p.h / p.w; // v zlomkoch strany
+      handle.setPointerCapture(e.pointerId);
+      const move = (ev) => {
+        const fx = (ev.clientX - r.left) / r.width;
+        let w = clamp(fx - p.x, 0.04, 1 - p.x);
+        if (p.y + w * aspect > 1) w = (1 - p.y) / aspect;
+        p.w = w; p.h = w * aspect;
+        position(p);
+      };
+      const up = () => { handle.removeEventListener('pointermove', move); handle.removeEventListener('pointerup', up); handle.removeEventListener('pointercancel', up); };
+      handle.addEventListener('pointermove', move);
+      handle.addEventListener('pointerup', up);
+      handle.addEventListener('pointercancel', up);
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (els.dialog.open) return;
+    if (e.key === 'Escape' && state.placing) { state.placing = false; state.doc && state.doc.pages.forEach(pg => pg.ghost.style.display = 'none'); updateUI(); }
+    if ((e.key === 'Delete' || e.key === 'Backspace') && state.selected && document.activeElement === document.body) { e.preventDefault(); removePlacement(state.selected); }
+  });
+
+  els.sigChip.addEventListener('click', () => {
+    if (!state.signature) return;
+    state.placing = !state.placing;
+    updateUI();
+  });
+
+  // ---------- Podpisová plocha ----------
+  const pad = {
+    strokes: [], current: null, color: '#111111', width: 3,
+    ctx: els.pad.getContext('2d'), dpr: 1,
+  };
+
+  function resizePad() {
+    const r = els.padWrap.getBoundingClientRect();
+    pad.dpr = window.devicePixelRatio || 1;
+    els.pad.width = Math.round(r.width * pad.dpr);
+    els.pad.height = Math.round(r.height * pad.dpr);
+    redrawPad();
+  }
+  // Body ukladáme v zlomkoch plochy, aby zmena veľkosti okna nič nepokazila.
+  function drawStroke(ctx, s, W, H, scale) {
+    const pts = s.points;
+    if (!pts.length) return;
+    ctx.strokeStyle = s.color; ctx.fillStyle = s.color;
+    ctx.lineWidth = s.width * scale;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    if (pts.length === 1) {
+      ctx.beginPath(); ctx.arc(pts[0][0] * W, pts[0][1] * H, (s.width * scale) / 2, 0, Math.PI * 2); ctx.fill();
+      return;
+    }
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0] * W, pts[0][1] * H);
+    for (let i = 1; i < pts.length - 1; i++) {
+      const mx = (pts[i][0] + pts[i + 1][0]) / 2, my = (pts[i][1] + pts[i + 1][1]) / 2;
+      ctx.quadraticCurveTo(pts[i][0] * W, pts[i][1] * H, mx * W, my * H);
+    }
+    const last = pts[pts.length - 1];
+    ctx.lineTo(last[0] * W, last[1] * H);
+    ctx.stroke();
+  }
+  function redrawPad() {
+    const { ctx } = pad, W = els.pad.width, H = els.pad.height;
+    ctx.clearRect(0, 0, W, H);
+    const all = pad.current ? pad.strokes.concat([pad.current]) : pad.strokes;
+    all.forEach(s => drawStroke(ctx, s, W, H, pad.dpr));
+    els.padPlaceholder.hidden = all.length > 0;
+  }
+  function padPt(e) {
+    const r = els.pad.getBoundingClientRect();
+    return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height];
+  }
+  els.pad.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    els.pad.setPointerCapture(e.pointerId);
+    pad.current = { color: pad.color, width: pad.width, points: [padPt(e)] };
+    redrawPad();
+  });
+  els.pad.addEventListener('pointermove', (e) => {
+    if (!pad.current) return;
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+    (evs.length ? evs : [e]).forEach(ev => pad.current.points.push(padPt(ev)));
+    redrawPad();
+  });
+  const endStroke = () => {
+    if (!pad.current) return;
+    pad.strokes.push(pad.current);
+    pad.current = null;
+    redrawPad();
+  };
+  els.pad.addEventListener('pointerup', endStroke);
+  els.pad.addEventListener('pointercancel', endStroke);
+
+  document.querySelectorAll('.swatch').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.swatch').forEach(x => x.classList.toggle('active', x === b));
+    pad.color = b.dataset.color;
+  }));
+  els.thickness.addEventListener('input', () => { pad.width = parseFloat(els.thickness.value); });
+  $('padUndo').addEventListener('click', () => { pad.strokes.pop(); redrawPad(); });
+  $('padClear').addEventListener('click', () => { pad.strokes = []; redrawPad(); });
+
+  function openPad() {
+    pad.strokes = []; pad.current = null;
+    els.dialog.showModal();
+    requestAnimationFrame(resizePad);
+  }
+  function closePad() { els.dialog.close(); }
+  els.btnDraw.addEventListener('click', openPad);
+  $('padClose').addEventListener('click', closePad);
+  $('padCancel').addEventListener('click', closePad);
+  window.addEventListener('resize', () => { if (els.dialog.open) resizePad(); });
+
+  // Vyexportuje podpis ako orezaný PNG s priehľadným pozadím vo vysokom rozlíšení.
+  function exportSignature() {
+    const r = els.padWrap.getBoundingClientRect();
+    const S = 4; // 4× rozlíšenie pre ostrý tlač
+    const W = Math.round(r.width * S), H = Math.round(r.height * S);
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const ctx = c.getContext('2d');
+    pad.strokes.forEach(s => drawStroke(ctx, s, W, H, S));
+    const data = ctx.getImageData(0, 0, W, H).data;
+    let minX = W, minY = H, maxX = -1, maxY = -1;
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        if (data[(y * W + x) * 4 + 3] > 8) {
+          if (x < minX) minX = x; if (x > maxX) maxX = x;
+          if (y < minY) minY = y; if (y > maxY) maxY = y;
+        }
+      }
+    }
+    if (maxX < 0) return null;
+    const padPx = 6 * S;
+    minX = Math.max(0, minX - padPx); minY = Math.max(0, minY - padPx);
+    maxX = Math.min(W - 1, maxX + padPx); maxY = Math.min(H - 1, maxY + padPx);
+    const out = document.createElement('canvas');
+    out.width = maxX - minX + 1; out.height = maxY - minY + 1;
+    out.getContext('2d').drawImage(c, minX, minY, out.width, out.height, 0, 0, out.width, out.height);
+    return { dataUrl: out.toDataURL('image/png'), ratio: out.height / out.width };
+  }
+
+  $('padSave').addEventListener('click', () => {
+    const sig = exportSignature();
+    if (!sig) { toast('Najprv sa podpíšte do bieleho poľa.'); return; }
+    state.signature = sig;
+    els.sigChipImg.src = sig.dataUrl;
+    closePad();
+    state.placing = true;
+    updateUI();
+    toast('Teraz kliknite do dokumentu, kam chcete podpis vložiť.');
+  });
+
+  // ---------- Export ----------
+  els.btnDownload.addEventListener('click', async () => {
+    if (!state.doc || !state.placements.length) return;
+    els.btnDownload.disabled = true;
+    try {
+      if (state.doc.kind === 'pdf') await exportPdf(); else await exportImage();
+      toast('Hotovo — podpísaný dokument sa stiahol.');
+    } catch (err) {
+      console.error(err);
+      if (err && err.code === 'declined') { toast('Sťahovanie zrušené.'); return; }
+      toast(window.PDFLib ? 'Export sa nepodaril.' : 'Nepodarilo sa načítať knižnicu na PDF (skontrolujte internet).');
+    } finally {
+      updateUI();
+    }
+  });
+
+  function signedName(ext) {
+    const base = state.doc.name.replace(/\.[^.]+$/, '');
+    return `${base}_podpisany.${ext}`;
+  }
+  async function download(blob, name) {
+    // Na zverejnenej stránke (claude.ai) sa sťahuje cez povolenie "downloads"
+    const dl = window.claude && window.claude.use ? await window.claude.use('downloads').catch(() => null) : null;
+    if (dl) { await dl.save({ filename: name, data: blob }); return; }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+  function dataUrlBytes(dataUrl) {
+    const bin = atob(dataUrl.split(',')[1]);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    return arr;
+  }
+
+  async function exportPdf() {
+    const { PDFDocument, degrees } = PDFLib;
+    const pdfDoc = await PDFDocument.load(state.doc.bytes, { ignoreEncryption: true });
+    const pages = pdfDoc.getPages();
+    const cache = new Map();
+    for (const p of state.placements) {
+      if (!cache.has(p.dataUrl)) cache.set(p.dataUrl, await pdfDoc.embedPng(dataUrlBytes(p.dataUrl)));
+      const img = cache.get(p.dataUrl);
+      const page = pages[p.page];
+      const box = page.getCropBox();
+      const rot = ((page.getRotation().angle % 360) + 360) % 360;
+      const W = box.width, H = box.height;
+      const swapped = rot === 90 || rot === 270;
+      const DW = swapped ? H : W, DH = swapped ? W : H; // rozmery tak, ako sa strana zobrazuje
+      const iw = p.w * DW, ih = p.h * DH;
+      // ľavý dolný roh podpisu v zobrazení -> súradnice PDF podľa otočenia strany
+      const fx = p.x, fy = p.y + p.h;
+      let u, v;
+      if (rot === 90)       { u = fy * W;       v = fx * H; }
+      else if (rot === 180) { u = (1 - fx) * W; v = fy * H; }
+      else if (rot === 270) { u = (1 - fy) * W; v = (1 - fx) * H; }
+      else                  { u = fx * W;       v = (1 - fy) * H; }
+      page.drawImage(img, { x: box.x + u, y: box.y + v, width: iw, height: ih, rotate: degrees(rot) });
+    }
+    const out = await pdfDoc.save();
+    await download(new Blob([out], { type: 'application/pdf' }), signedName('pdf'));
+  }
+
+  async function exportImage() {
+    const img = state.doc.imgEl;
+    const W = img.naturalWidth, H = img.naturalHeight;
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const ctx = c.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    for (const p of state.placements) {
+      const s = new Image();
+      await new Promise((res, rej) => { s.onload = res; s.onerror = rej; s.src = p.dataUrl; });
+      ctx.drawImage(s, p.x * W, p.y * H, p.w * W, p.h * H);
+    }
+    const blob = await new Promise(res => c.toBlob(res, 'image/png'));
+    await download(blob, signedName('png'));
+  }
+
+  updateUI();
+})();
+</script>
+</body>
+</html>
